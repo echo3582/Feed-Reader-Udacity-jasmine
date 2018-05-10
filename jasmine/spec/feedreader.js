@@ -95,15 +95,18 @@ $(function() {
          * 写一个测试保证当用 loadFeed 函数加载一个新源的时候内容会真的改变。
          * 记住，loadFeed() 函数是异步的。
          */
-        // var preFeedHtml = $('.feed').html();
-        loadFeed(1,done);
-        // beforeEach(function(done) {
-        //     setTimeout(function() {
-        //         loadFeed(1,done);
-        //     },1);
-        // });
+        var preFeedHtml;
+        var afterFeedHtml;
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+        beforeEach(function(done) {
+            preFeedHtml = $('.feed').html();
+            loadFeed(1,function() {
+                afterFeedHtml = $('.feed').html();
+                done();
+            });
+        });
         it('works', function(done) {
-            expect(preFeedHtml).not.toBe($('.feed').html());
+            expect(preFeedHtml).not.toBe(afterFeedHtml);
             done();
         });
     });
