@@ -80,12 +80,11 @@ $(function () {
          */
         beforeEach(function (done) {
             setTimeout(function () {
-                value = 0;
-                done();
+                loadFeed(1,done);
             }, 1);
         });
         it('is normal', function (done) {
-            expect($('.feed .entry')).not.toBeNull();
+            expect($('.feed .entry').length).not.toBe(0);
             done();
         });
     });
@@ -97,12 +96,17 @@ $(function () {
          */
         var preFeedHtml;
         var afterFeedHtml;
+        /* 解释：
+         * 修改异步响应超时时间，默认5s,改为10s。
+         */
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
         beforeEach(function (done) {
-            preFeedHtml = $('.feed').html();
-            loadFeed(1, function () {
+            loadFeed(1,function (){
+                preFeedHtml = $('.feed').html();
+                loadFeed(0, function () {
                 afterFeedHtml = $('.feed').html();
                 done();
+                });
             });
         });
         it('works', function (done) {
